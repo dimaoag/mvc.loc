@@ -40,15 +40,20 @@ class Router{
             if (preg_match("~$uriPattern~", $uri)){
 
                 //определить какой контролер и метод обробатывает запрос
+
+                $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
+
                 // разделения строки в масив
 
-                $segments = explode('/', $path);
+                $segments = explode('/', $internalRoute);
 
                 // получаеи первый елемент масива и формируем имя контролера
 
                 $controllerName = array_shift($segments).'Controller';
                 $controllerName = ucfirst($controllerName);
                 $actionName = 'action'.ucfirst(array_shift($segments));
+
+                $parameters = $segments;
 
 
                 //Подключить файл класса-контролера
@@ -64,7 +69,7 @@ class Router{
                 //создание обекта, вызов метода(action)
 
                 $controllerObject = new $controllerName;
-                $result = $controllerObject->$actionName();
+                $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
                 if ($result != null){ //выход с цикла foreach;
                     break;
