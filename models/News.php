@@ -11,7 +11,7 @@ class News{
 
             $db = Db::getConnection();
 
-            $result = $db->query('SELECT * from news_mvc WHERE id='.$id);
+            $result = $db->query('SELECT * from news WHERE id='.$id);
             $result->setFetchMode(PDO::FETCH_ASSOC);
 
             $newsItem = $result->fetch();
@@ -26,8 +26,8 @@ class News{
 
         $newsList = array();
 
-        $result = $db->query('SELECT id, title, date, short_content '
-            . 'FROM news_mvc '
+        $result = $db->query('SELECT id, title, date, short_content, author_name '
+            . 'FROM news '
             . 'ORDER BY date DESC '
             . 'LIMIT 10 ');
 
@@ -38,6 +38,7 @@ class News{
             $newsList[$i]['title'] = $row['title'];
             $newsList[$i]['date'] = $row['date'];
             $newsList[$i]['short_content'] = $row['short_content'];
+            $newsList[$i]['author_name'] = $row['author_name'];
             $i++;
         }
 
